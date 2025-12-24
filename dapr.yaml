@@ -1,0 +1,240 @@
+version: 1
+
+# Multi-app Dapr configuration for all microservices
+# This file centralizes all Dapr application configurations
+# Components are defined in /dapr/components
+# Global config is defined in /dapr/config
+
+apps:
+  # BFF Service
+  - appID: bff-service
+    appDirPath: ./services/bff_service
+    command: ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3500
+    daprGRPCPort: 50001
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "bff-service"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3500"
+      DAPR_GRPC_PORT: "50001"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+
+  # CAS Audit Service
+  - appID: cas-audit
+    appDirPath: ./services/cas_service
+    command: ["uv", "run", "uvicorn", "cas_audit.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3501
+    daprGRPCPort: 50002
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cas-audit"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3501"
+      DAPR_GRPC_PORT: "50002"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+      DAPR_TOPIC: "audit-events"
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/cas_audit"
+
+  # Client Service
+  - appID: cds-client
+    appDirPath: ./services/client_service
+    command: ["uv", "run", "uvicorn", "cds_client.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3502
+    daprGRPCPort: 50003
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-client"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3502"
+      DAPR_GRPC_PORT: "50003"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+
+  # Document Service
+  - appID: cds-document
+    appDirPath: ./services/document_service
+    command: ["uv", "run", "uvicorn", "cds_document.api:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3503
+    daprGRPCPort: 50004
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-document"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3503"
+      DAPR_GRPC_PORT: "50004"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+
+  # Interaction Service
+  - appID: cds-interaction
+    appDirPath: ./services/interaction_service
+    command: ["uv", "run", "uvicorn", "cds_interaction.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3504
+    daprGRPCPort: 50005
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-interaction"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3504"
+      DAPR_GRPC_PORT: "50005"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgres@localhost:5432/interaction_db"
+
+  # Policy Service
+  - appID: cps-policy
+    appDirPath: ./services/policy_service
+    command: ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3505
+    daprGRPCPort: 50006
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cps-policy"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3505"
+      DAPR_GRPC_PORT: "50006"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "rmbrain-pubsub"
+      CPS_APP_PORT: "8000"
+      CPS_DAPR_PORT: "3505"
+      CPS_DAPR_GRPC_PORT: "50006"
+
+  # Product Service
+  - appID: cds-product
+    appDirPath: ./services/product_service
+    command: ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3506
+    daprGRPCPort: 50007
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-product"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3506"
+      DAPR_GRPC_PORT: "50007"
+      LOG_LEVEL: "INFO"
+      PUBSUB_NAME: "rmbrain-pubsub"
+      PRODUCT_TOPIC: "rb.product"
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/cds_product"
+
+  # Relationship Service
+  - appID: cds-relationship
+    appDirPath: ./services/relationship_service
+    command: ["uv", "run", "uvicorn", "cds_relationship.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3507
+    daprGRPCPort: 50008
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-relationship"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3507"
+      DAPR_GRPC_PORT: "50008"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+
+  # Risk Profile Service
+  - appID: cds-riskprofile
+    appDirPath: ./services/riskprofile_service
+    command: ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3508
+    daprGRPCPort: 50009
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-riskprofile"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3508"
+      DAPR_GRPC_PORT: "50009"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "rmbrain-pubsub"
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/riskprofile_db"
+
+  # RMBrain Main App
+  - appID: rmbrain-mainapp
+    appDirPath: ./services/rmbrain-mainapp
+    command: ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3509
+    daprGRPCPort: 50010
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "rmbrain-mainapp"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3509"
+      DAPR_GRPC_PORT: "50010"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+
+  # Task Service
+  - appID: cds-task
+    appDirPath: ./services/task_service
+    command: ["uv", "run", "uvicorn", "cds_task.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    appPort: 8000
+    daprHTTPPort: 3510
+    daprGRPCPort: 50011
+    logLevel: info
+    enableMetrics: true
+    enableAPILogging: true
+    componentsPath: ./dapr/components
+    config: ./dapr/config/global-config.yaml
+    env:
+      APP_ID: "cds-task"
+      APP_PORT: "8000"
+      DAPR_HTTP_PORT: "3510"
+      DAPR_GRPC_PORT: "50011"
+      LOG_LEVEL: "INFO"
+      DAPR_PUBSUB_NAME: "pubsub"
+
+# Note: Global configurations are defined in ./dapr/config/
+# Each app references the config file directly via the 'config' field above
+

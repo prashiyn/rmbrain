@@ -1,0 +1,3 @@
+# Declarative pub/sub subscriptions will be placed here
+# Each subscription should be a separate YAML file following Dapr subscription format
+

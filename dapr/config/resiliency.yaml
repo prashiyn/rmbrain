@@ -1,0 +1,36 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: rmbrain-resiliency
+  namespace: default
+spec:
+  # Resiliency policies for inter-service communication
+  # Services should use Dapr resiliency policies instead of custom retry logic
+  resiliency:
+    policies:
+      retry:
+        DefaultRetryPolicy:
+          policy: constant
+          duration: 5s
+          maxRetries: 3
+        ExponentialBackoffPolicy:
+          policy: exponential
+          maxInterval: 30s
+          maxRetries: 5
+          base: 2s
+      circuitBreaker:
+        DefaultCircuitBreakerPolicy:
+          maxRequests: 1
+          timeout: 5s
+          trip: consecutiveFailures >= 5
+    targets:
+      apps:
+        # Apply default retry and circuit breaker to all app invocations
+        "*":
+          retry: DefaultRetryPolicy
+          circuitBreaker: DefaultCircuitBreakerPolicy
+      components:
+        # Apply policies to component operations
+        "*":
+          retry: DefaultRetryPolicy
+

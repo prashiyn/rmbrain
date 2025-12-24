@@ -1,0 +1,51 @@
+{
+    "version": 1,
+    "project": {
+      "type": "monorepo",
+      "architecture": "dapr-microservices"
+    },
+    "constraints": {
+      "forbiddenPaths": [
+        "**/services/**/components/**",
+        "**/services/**/subscriptions/**"
+      ],
+      "requiredPaths": [
+        "dapr/components",
+        "dapr/config",
+        "dapr/subscriptions"
+      ]
+    },
+    "codingGuidelines": {
+      "dapr": {
+        "allowedInteractionModes": ["http", "grpc", "sdk"],
+        "disallowedPatterns": [
+          "manual sidecar invocation",
+          "custom service discovery",
+          "direct cloud secret access"
+        ]
+      }
+    },
+    "generationRules": {
+      "beforeCreatingNewDaprComponent": [
+        "check_existing_components",
+        "ask_user_confirmation"
+      ],
+      "beforeAddingRetryLogic": [
+        "check_dapr_resiliency_config"
+      ]
+    },
+    "serviceRules": {
+      "mustExposeEndpoints": ["/health"],
+      "mustUseEnvVars": [
+        "APP_ID",
+        "APP_PORT",
+        "DAPR_HTTP_PORT",
+        "DAPR_GRPC_PORT"
+      ]
+    },
+    "documentationRules": {
+      "pubsubTopics": "shared/contracts",
+      "stateKeys": "namespaced"
+    }
+  }
+  

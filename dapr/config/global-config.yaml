@@ -1,0 +1,59 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: rmbrain-global-config
+  namespace: default
+spec:
+  tracing:
+    samplingRate: "1"
+    otel:
+      endpointAddress: "http://localhost:4317"
+  metrics:
+    enabled: true
+  httpPipeline:
+    handlers:
+      - name: ratelimit
+        type: middleware.http.ratelimit
+      - name: cors
+        type: middleware.http.cors
+  features:
+    - name: pubsub.routing
+      enabled: true
+    - name: pubsub.deadletter
+      enabled: true
+  accessControl:
+    defaultAction: allow
+    trustDomain: "public"
+    policies:
+      - appId: rmbrain-mainapp
+        defaultAction: allow
+        trustDomain: "public"
+      - appId: cds-riskprofile
+        defaultAction: allow
+        operations:
+          - name: /health
+            httpVerb: ["GET"]
+            action: allow
+          - name: /dapr/subscribe
+            httpVerb: ["GET"]
+            action: allow
+          - name: /events/*
+            httpVerb: ["POST"]
+            action: allow
+          - name: /internal/*
+            httpVerb: ["GET"]
+            action: allow
+      - appId: cps-policy
+        defaultAction: allow
+        trustDomain: "public"
+        operations:
+          - name: /api/v1/authorize
+            httpVerb: ["POST"]
+            action: allow
+          - name: /api/v1/health
+            httpVerb: ["GET"]
+            action: allow
+          - name: /dapr/subscribe
+            httpVerb: ["POST"]
+            action: allow
+
