@@ -10,10 +10,10 @@
 │   ├── config/             ← tracing, metrics, resiliency
 │   └── subscriptions/      ← declarative pubsub subscriptions
 │
-├── services/
-│   ├── user-service/
-│   ├── payment-service/
-│   └── notification-service/
+├── user-service/
+├── payment-service/
+└── notification-service/
+... all the services
 │
 ├── shared/
 │   ├── proto/

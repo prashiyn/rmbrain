@@ -10,8 +10,8 @@ All service `dapr.yaml` files have been successfully updated to align with the c
 ### ✅ What's Working Correctly
 
 1. **All `dapr.yaml` files updated** (11/11 services)
-   - ✅ Components path points to `../../dapr/components`
-   - ✅ Config path points to `../../dapr/config/global-config.yaml`
+   - ✅ Components path points to `../dapr/components`
+   - ✅ Config path points to `../dapr/config/global-config.yaml`
    - ✅ Port numbers aligned with root `dapr.yaml`
    - ✅ Environment variables standardized
 
@@ -41,7 +41,7 @@ The following services still have local `components/` directories:
 - `rmbrain-mainapp/components/`
 - `task_service/components/`
 
-**Impact**: None - These directories are ignored since `dapr.yaml` now points to `../../dapr/components`
+**Impact**: None - These directories are ignored since `dapr.yaml` now points to `../dapr/components`
 
 **Recommendation**: 
 - **Option A**: Keep them for backward compatibility (if someone runs services without the updated dapr.yaml)
@@ -75,17 +75,17 @@ Several README files still reference:
 - Local config files
 
 **Affected Files**:
-- `services/document_service/README.md`
-- `services/product_service/README.md`
-- `services/rmbrain-mainapp/DAPR_INTEGRATION.md`
-- `services/rmbrain-mainapp/README.md`
-- `services/interaction_service/README.md`
-- `services/riskprofile_service/README.md`
-- `services/cas_service/README.md`
-- `services/relationship_service/README.md`
-- `services/task_service/README.md`
-- `services/policy_service/README.md`
-- `services/policy_service/DEPLOYMENT.md`
+- `document_service/README.md`
+- `product_service/README.md`
+- `rmbrain-mainapp/DAPR_INTEGRATION.md`
+- `rmbrain-mainapp/README.md`
+- `interaction_service/README.md`
+- `riskprofile_service/README.md`
+- `cas_service/README.md`
+- `relationship_service/README.md`
+- `task_service/README.md`
+- `policy_service/README.md`
+- `policy_service/DEPLOYMENT.md`
 
 **Impact**: Low - Documentation may confuse developers, but doesn't affect runtime
 

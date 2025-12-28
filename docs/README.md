@@ -38,18 +38,17 @@ rmbrain/
 │   ├── config/               # Global Dapr configuration (tracing, metrics, resiliency)
 │   └── subscriptions/        # Declarative pub/sub subscriptions
 │
-├── services/                  # Microservices
-│   ├── bff_service/          # Backend for Frontend
-│   ├── cas_service/          # Canonical Audit Service
-│   ├── client_service/       # Client Data Service
-│   ├── document_service/     # Document Management Service
-│   ├── interaction_service/  # Interaction Service
-│   ├── policy_service/       # Canonical Policy Service
-│   ├── product_service/      # Product Data Service
-│   ├── relationship_service/ # Relationship Service
-│   ├── riskprofile_service/  # Risk Profile Service
-│   ├── rmbrain-mainapp/       # Main Application
-│   └── task_service/         # Task Service
+├── bff_service/              # Backend for Frontend
+├── cas_service/              # Canonical Audit Service
+├── client_service/           # Client Data Service
+├── document_service/          # Document Management Service
+├── interaction_service/      # Interaction Service
+├── policy_service/           # Canonical Policy Service
+├── product_service/          # Product Data Service
+├── relationship_service/     # Relationship Service
+├── riskprofile_service/      # Risk Profile Service
+├── rmbrain-mainapp/          # Main Application
+├── task_service/            # Task Service
 │
 ├── dapr.yaml                 # Multi-app Dapr configuration (runs all services)
 ├── .cursor/                  # Cursor IDE rules and configuration
@@ -69,8 +68,8 @@ All Dapr resources are centralized in `/dapr`:
 ### Service Configuration
 
 Each service has its own `dapr.yaml` file that:
-- References centralized components: `../../dapr/components`
-- References centralized config: `../../dapr/config/global-config.yaml`
+- References centralized components: `../dapr/components`
+- References centralized config: `../dapr/config/global-config.yaml`
 - Defines service-specific settings (ports, environment variables, command)
 
 ### Why Centralized?
@@ -92,12 +91,22 @@ Each service has its own `dapr.yaml` file that:
 
 ### Initial Setup
 
-1. **Initialize Dapr** (if not already done):
+1. **Set up databases** (REQUIRED before running services):
+   ```bash
+   # Run the database setup script
+   ./scripts/setup_databases.sh
+   
+   # Or see scripts/SETUP_DATABASES.md for manual setup
+   ```
+   
+   This creates all 9 PostgreSQL databases and initializes schemas.
+
+2. **Initialize Dapr** (if not already done):
    ```bash
    dapr init
    ```
 
-2. **Verify Dapr installation**:
+3. **Verify Dapr installation**:
    ```bash
    dapr --version
    dapr list
@@ -115,6 +124,17 @@ Each service has its own `dapr.yaml` file that:
 
 ### Option 1: Run All Services (Multi-App)
 
+**Prerequisites**: 
+1. **Set up databases** (see Initial Setup step 1 above)
+2. Install dependencies for all services:
+```bash
+# Install dependencies for each service
+for dir in bff_service cas_service client_service document_service interaction_service policy_service product_service relationship_service riskprofile_service rmbrain-mainapp task_service; do
+  echo "Installing dependencies in $dir"
+  (cd "$dir" && uv sync)
+done
+```
+
 Run all services simultaneously using the root `dapr.yaml`:
 
 ```bash
@@ -130,13 +150,18 @@ This will:
 
 **Note**: This is useful for integration testing and local development of the full system.
 
+**Important**: 
+- Ensure all service dependencies are installed before running (see [Setting Up a Service](#setting-up-a-service))
+- Commands use `uv run python -m uvicorn` which ensures Python from the local virtual environment is used
+- Each service has its own virtual environment (`.venv`), and `uv run` automatically uses the correct environment
+
 ### Option 2: Run Individual Service
 
 Run a single service for development/debugging:
 
 ```bash
 # Navigate to service directory
-cd services/<service-name>
+cd <service-name>
 
 # Run with service's dapr.yaml
 dapr run -f dapr.yaml
@@ -144,13 +169,13 @@ dapr run -f dapr.yaml
 
 Example:
 ```bash
-cd services/task_service
+cd task_service
 dapr run -f dapr.yaml
 ```
 
 The service's `dapr.yaml` will:
-- Reference `../../dapr/components` (centralized)
-- Reference `../../dapr/config/global-config.yaml` (centralized)
+- Reference `../dapr/components` (centralized)
+- Reference `../dapr/config/global-config.yaml` (centralized)
 - Use service-specific ports and environment variables
 
 ### Option 3: Manual Dapr Run
@@ -163,8 +188,8 @@ dapr run \
   --app-port 8000 \
   --dapr-http-port <http-port> \
   --dapr-grpc-port <grpc-port> \
-  --components-path ../../dapr/components \
-  --config ../../dapr/config/global-config.yaml \
+  --components-path ../dapr/components \
+  --config ../dapr/config/global-config.yaml \
   -- <command>
 ```
 
@@ -174,10 +199,10 @@ dapr run \
   --app-id cds-task \
   --app-port 8000 \
   --dapr-http-port 3510 \
-  --dapr-grpc-port 50011 \
-  --components-path ../../dapr/components \
-  --config ../../dapr/config/global-config.yaml \
-  -- uv run uvicorn cds_task.main:app --host 0.0.0.0 --port 8000
+  --dapr-grpc-port 60011 \
+  --components-path ../dapr/components \
+  --config ../dapr/config/global-config.yaml \
+  -- uv run python -m uvicorn cds_task.main:app --host 0.0.0.0 --port 8000
 ```
 
 ## Dapr Configuration
@@ -225,17 +250,19 @@ Each service has unique Dapr ports to avoid conflicts:
 
 | Service | App Port | Dapr HTTP | Dapr gRPC |
 |---------|----------|-----------|-----------|
-| bff-service | 8000 | 3500 | 50001 |
-| cas-audit | 8000 | 3501 | 50002 |
-| cds-client | 8000 | 3502 | 50003 |
-| cds-document | 8000 | 3503 | 50004 |
-| cds-interaction | 8000 | 3504 | 50005 |
-| cps-policy | 8000 | 3505 | 50006 |
-| cds-product | 8000 | 3506 | 50007 |
-| cds-relationship | 8000 | 3507 | 50008 |
-| cds-riskprofile | 8000 | 3508 | 50009 |
-| rmbrain-mainapp | 8000 | 3509 | 50010 |
-| cds-task | 8000 | 3510 | 50011 |
+| bff-service | 8000 | 3500 | 60001 |
+| cas-audit | 8001 | 3501 | 60002 |
+| cds-client | 8002 | 3502 | 60003 |
+| cds-document | 8003 | 3503 | 60004 |
+| cds-interaction | 8004 | 3504 | 60005 |
+| cps-policy | 8005 | 3505 | 60006 |
+| cds-product | 8006 | 3506 | 60007 |
+| cds-relationship | 8007 | 3507 | 60008 |
+| cds-riskprofile | 8008 | 3508 | 60009 |
+| rmbrain-mainapp | 8009 | 3509 | 60010 |
+| cds-task | 8010 | 3510 | 60011 |
+
+**Note**: gRPC ports use the 60000 series to avoid conflicts with Dapr's internal services which use the 50000 series.
 
 ### Accessing Services via Dapr
 
@@ -263,15 +290,17 @@ curl -X POST http://localhost:3505/v1.0/invoke/cps-policy/method/api/v1/authoriz
 
 1. **Navigate to service directory**:
    ```bash
-   cd services/<service-name>
+   cd <service-name>
    ```
 
-2. **Install dependencies**:
+2. **Install dependencies** (REQUIRED before running):
    ```bash
    uv sync
    # or
    pip install -r requirements.txt
    ```
+   
+   **Important**: Services will fail to start with "Failed to spawn: uvicorn" if dependencies aren't installed.
 
 3. **Set up database** (if required):
    ```bash
@@ -320,11 +349,11 @@ curl -X POST http://localhost:3505/v1.0/invoke/cps-policy/method/api/v1/authoriz
 
 #### Adding a New Service
 
-1. Create service directory in `/services/`
+1. Create service directory in repository root
 2. Create `dapr.yaml` with:
    - Unique ports (check existing services)
-   - Reference to `../../dapr/components`
-   - Reference to `../../dapr/config/global-config.yaml`
+   - Reference to `../dapr/components`
+   - Reference to `../dapr/config/global-config.yaml`
 3. Add service to root `dapr.yaml` for multi-app support
 
 ### Testing
@@ -377,6 +406,58 @@ To switch from in-memory to Redis:
 
 ## Configuration Management
 
+### Database Configuration
+
+This repository uses a **hybrid approach** for database configuration:
+
+- **Development**: Database URLs are defined in `dapr.yaml` files (root and service-level) with localhost defaults
+- **Production**: Override database URLs using `.env` files in each service directory (not committed to git)
+
+#### Database URLs in dapr.yaml
+
+All services with databases have `DATABASE_URL` defined in:
+- Root `dapr.yaml` - Used when running all services together (`dapr run -f dapr.yaml`)
+- Service `dapr.yaml` - Used when running individual services
+
+**Development defaults** (localhost):
+- `postgresql://postgres:postgres@localhost:5432/<database_name>` (standard PostgreSQL)
+- `postgresql+asyncpg://postgres:postgres@localhost:5432/<database_name>` (async PostgreSQL)
+
+#### Using .env Files for Production
+
+1. **Copy the example file**:
+   ```bash
+   cd <service-name>
+   cp .env.example .env
+   ```
+
+2. **Update with production credentials**:
+   ```bash
+   # Edit .env file
+   DATABASE_URL=postgresql://user:password@prod-host:5432/database_name
+   ```
+
+3. **The service will automatically load** `.env` file (via `pydantic_settings`)
+
+**Important**: 
+- `.env` files are excluded from git (via `.gitignore`)
+- Never commit production credentials
+- Use `.env.example` as a template
+
+#### Database Schema Names
+
+| Service | Database Name |
+|---------|--------------|
+| cas-audit | `cas_audit` |
+| cds-client | `cds_client` |
+| cds-document | `cds_document` |
+| cds-interaction | `interaction_db` |
+| cds-product | `cds_product` |
+| cds-relationship | `relationship_db` |
+| cds-riskprofile | `riskprofile_db` |
+| rmbrain-mainapp | `rmbrain_mainapp` |
+| cds-task | `cds_task` |
+
 ### Environment Variables
 
 Services use environment variables for configuration:
@@ -388,7 +469,7 @@ Services use environment variables for configuration:
 - `DAPR_GRPC_PORT`: Dapr gRPC port (unique per service)
 
 **Service-Specific Variables**:
-- `DATABASE_URL`: Database connection string
+- `DATABASE_URL`: Database connection string (see [Database Configuration](#database-configuration) above)
 - `DAPR_PUBSUB_NAME`: Pub/sub component name
 - `LOG_LEVEL`: Logging level
 
@@ -413,31 +494,48 @@ Services use environment variables for configuration:
 
 ### Service Won't Start
 
-1. **Check Dapr is running**:
+1. **Install dependencies first** (IMPORTANT):
+   ```bash
+   # Navigate to service directory
+   cd <service-name>
+   
+   # Install dependencies using uv
+   uv sync
+   
+   # Or using pip
+   pip install -r requirements.txt
+   ```
+   
+   **Error**: `Failed to spawn: uvicorn` usually means:
+   - Dependencies aren't installed (run `uv sync` in service directory)
+   - Virtual environment doesn't exist (run `uv sync` to create it)
+   - Using `python -m uvicorn` ensures the correct Python from the venv is used
+
+2. **Check Dapr is running**:
    ```bash
    dapr list
    ```
 
-2. **Check ports are available**:
+3. **Check ports are available**:
    ```bash
    # Check if port is in use
    lsof -i :<port>
    ```
 
-3. **Check component files exist**:
+4. **Check component files exist**:
    ```bash
-   ls -la ../../dapr/components/
+   ls -la ../dapr/components/
    ```
 
-4. **Check config file exists**:
+5. **Check config file exists**:
    ```bash
-   ls -la ../../dapr/config/global-config.yaml
+   ls -la ../dapr/config/global-config.yaml
    ```
 
 ### Components Not Loading
 
 1. **Verify component path**:
-   - Should be `../../dapr/components` from service directory
+   - Should be `../dapr/components` from service directory
    - Or `./dapr/components` from repository root
 
 2. **Check component YAML syntax**:
@@ -451,11 +549,12 @@ Services use environment variables for configuration:
 
 ### Port Conflicts
 
-If you see port conflicts:
+If you see port conflicts (especially gRPC ports):
 
 1. **Check which service is using the port**:
    ```bash
    dapr list
+   lsof -i :<port>
    ```
 
 2. **Stop conflicting service**:
@@ -463,7 +562,9 @@ If you see port conflicts:
    dapr stop --app-id <service-id>
    ```
 
-3. **Or change port in service's dapr.yaml**
+3. **Note**: gRPC ports are in the 60000 series to avoid Dapr's internal 50000 series ports
+
+4. **Or change port in service's dapr.yaml**
 
 ### Events Not Publishing/Receiving
 
@@ -545,7 +646,7 @@ If you see port conflicts:
 
 ## Getting Help
 
-- Check service-specific README files in `/services/<service-name>/README.md`
+- Check service-specific README files in `/<service-name>/README.md`
 - Review Dapr logs: `dapr logs --app-id <service-id>`
 - Check Dapr status: `dapr list` and `dapr components list`
 - Review centralized config: `/dapr/README.md`

@@ -6,8 +6,8 @@
     },
     "constraints": {
       "forbiddenPaths": [
-        "**/services/**/components/**",
-        "**/services/**/subscriptions/**"
+        "**/components/**",
+        "**/subscriptions/**"
       ],
       "requiredPaths": [
         "dapr/components",

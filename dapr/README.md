@@ -53,7 +53,7 @@ This will start all microservices with their Dapr sidecars using the centralized
 Individual services can still use their local `dapr.yaml` files for debugging:
 
 ```bash
-cd services/<service-name>
+cd <service-name>
 dapr run -f dapr.yaml
 ```
 
@@ -63,17 +63,19 @@ Each service has unique Dapr ports to avoid conflicts:
 
 | Service | App Port | Dapr HTTP | Dapr gRPC |
 |---------|----------|-----------|-----------|
-| bff-service | 8000 | 3500 | 50001 |
-| cas-audit | 8000 | 3501 | 50002 |
-| cds-client | 8000 | 3502 | 50003 |
-| cds-document | 8000 | 3503 | 50004 |
-| cds-interaction | 8000 | 3504 | 50005 |
-| cps-policy | 8000 | 3505 | 50006 |
-| cds-product | 8000 | 3506 | 50007 |
-| cds-relationship | 8000 | 3507 | 50008 |
-| cds-riskprofile | 8000 | 3508 | 50009 |
-| rmbrain-mainapp | 8000 | 3509 | 50010 |
-| cds-task | 8000 | 3510 | 50011 |
+| bff-service | 8000 | 3500 | 60001 |
+| cas-audit | 8001 | 3501 | 60002 |
+| cds-client | 8002 | 3502 | 60003 |
+| cds-document | 8003 | 3503 | 60004 |
+| cds-interaction | 8004 | 3504 | 60005 |
+| cps-policy | 8005 | 3505 | 60006 |
+| cds-product | 8006 | 3506 | 60007 |
+| cds-relationship | 8007 | 3507 | 60008 |
+| cds-riskprofile | 8008 | 3508 | 60009 |
+| rmbrain-mainapp | 8009 | 3509 | 60010 |
+| cds-task | 8010 | 3510 | 60011 |
+
+**Note**: gRPC ports use the 60000 series to avoid conflicts with Dapr's internal services which use the 50000 series.
 
 ## Rules
 
