@@ -1,0 +1,140 @@
+{
+  "$id": "https://schemas.rmbrain.ai/task.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Task",
+  "type": "object",
+  "required": [
+    "task_id",
+    "tenant_id",
+    "task_type",
+    "status",
+    "priority",
+    "assignee",
+    "scope",
+    "source_event",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "review_document",
+        "review_interaction",
+        "follow_up_client",
+        "relationship_intervention",
+        "update_risk_profile",
+        "suitability_check",
+        "compliance_review",
+        "product_update_required",
+        "information_missing",
+        "client_structure_review",
+        "system_followup"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "completed",
+        "cancelled",
+        "expired",
+        "superseded",
+        "archived"
+      ]
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "assignee": {
+      "type": "object",
+      "required": ["actor_id", "actor_role", "actor_type"],
+      "properties": {
+        "actor_id": {
+          "type": "string"
+        },
+        "actor_role": {
+          "type": "string"
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "human_internal",
+            "human_external",
+            "system",
+            "service"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["primary_client_id"],
+      "properties": {
+        "relationship_id": {
+          "type": "string"
+        },
+        "primary_client_id": {
+          "type": "string"
+        },
+        "scope_client_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source_event": {
+      "type": "object",
+      "required": ["event_type", "entity_type", "entity_id"],
+      "properties": {
+        "event_type": {
+          "type": "string"
+        },
+        "entity_type": {
+          "type": "string",
+          "enum": [
+            "client",
+            "client_link",
+            "relationship",
+            "interaction",
+            "document",
+            "product",
+            "riskprofile",
+            "suitability"
+          ]
+        },
+        "entity_id": {
+          "type": "string"
+        }
+      }
+    },
+    "due_by": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+

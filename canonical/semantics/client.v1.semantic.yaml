@@ -1,0 +1,27 @@
+entity: client
+version: v1
+
+required_fields:
+  - client_id
+  - name
+  - status
+
+semantic_constraints:
+  status:
+    allowed: ["active", "inactive", "prospect"]
+  
+  risk_profile:
+    allowed: ["low", "medium", "high"]
+  
+  aum:
+    type: number
+    min: 0
+  
+  domicile:
+    type: string
+    uppercase: true
+
+cross_field_constraints:
+  - rule: "risk_profile == 'high' implies aum > 0"
+    description: "High-risk clients must have non-zero AUM"
+

@@ -1,0 +1,13 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/document.superseded.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document Superseded Event Payload",
+  "type": "object",
+  "required": ["document_id", "superseded_by", "version"],
+  "properties": {
+    "document_id": { "type": "string" },
+    "superseded_by": { "type": "string" },
+    "version": { "type": "string" }
+  }
+}
+

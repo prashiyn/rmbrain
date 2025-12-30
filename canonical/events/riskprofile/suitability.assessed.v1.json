@@ -1,0 +1,30 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/suitability.assessed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SuitabilityAssessed",
+  "type": "object",
+  "required": [
+    "assessment_id",
+    "client_id",
+    "product_id",
+    "riskprofile_id",
+    "outcome",
+    "tenant_id"
+  ],
+  "properties": {
+    "assessment_id": { "type": "string" },
+    "client_id": { "type": "string" },
+    "product_id": { "type": "string" },
+    "riskprofile_id": { "type": "string" },
+    "outcome": {
+      "type": "string",
+      "enum": ["suitable", "conditionally_suitable", "unsuitable"]
+    },
+    "tenant_id": { "type": "string" },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+

@@ -1,0 +1,15 @@
+{
+  "$id": "https://schemas.rmbrain.ai/interaction.superseded.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interaction Superseded Event Payload",
+  "type": "object",
+  "description": "Payload for interaction.superseded event (emitted by this service)",
+  "required": ["interaction_id"],
+  "properties": {
+    "interaction_id": {
+      "type": "string",
+      "description": "ID of the interaction that was superseded"
+    }
+  }
+}
+

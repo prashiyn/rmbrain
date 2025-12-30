@@ -1,0 +1,59 @@
+{
+  "$id": "https://schemas.rmbrain.ai/client_link.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClientLink",
+  "type": "object",
+  "required": [
+    "link_id",
+    "tenant_id",
+    "from_client_id",
+    "to_client_id",
+    "link_type",
+    "status",
+    "created_at"
+  ],
+  "properties": {
+    "link_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "from_client_id": { "type": "string" },
+    "to_client_id": { "type": "string" },
+    "link_type": {
+      "type": "string",
+      "enum": [
+        "owns",
+        "controls",
+        "manages",
+        "beneficiary_of",
+        "guarantor_for",
+        "director_of",
+        "shareholder_of",
+        "member_of",
+        "related_to",
+        "advisor_to"
+      ]
+    },
+    "roles": {
+      "type": "array",
+      "description": "Contextual roles for this link",
+      "items": { "type": "string" }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "terminated"
+      ]
+    },
+    "effective_from": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "effective_to": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}
+

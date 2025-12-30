@@ -1,0 +1,15 @@
+{
+  "$id": "https://schemas.rmbrain.ai/interaction.cancelled.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interaction Cancelled Event Payload",
+  "type": "object",
+  "description": "Payload for interaction.cancelled event",
+  "required": ["interaction_id"],
+  "properties": {
+    "interaction_id": {
+      "type": "string",
+      "description": "ID of the interaction being cancelled"
+    }
+  }
+}
+

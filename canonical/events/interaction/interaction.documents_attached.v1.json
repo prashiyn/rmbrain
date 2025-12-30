@@ -1,0 +1,19 @@
+{
+  "$id": "https://schemas.rmbrain.ai/interaction.documents_attached.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interaction Documents Attached Event Payload",
+  "type": "object",
+  "description": "Payload for interaction.documents_attached event (emitted by this service)",
+  "required": ["interaction_id", "document_id"],
+  "properties": {
+    "interaction_id": {
+      "type": "string",
+      "description": "ID of the interaction"
+    },
+    "document_id": {
+      "type": "string",
+      "description": "ID of the document that was attached"
+    }
+  }
+}
+

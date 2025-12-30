@@ -1,0 +1,54 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/task.expired.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Task Expired Event Payload",
+  "type": "object",
+  "description": "Payload for task.expired event emitted by cds_task",
+  "required": [
+    "task_id",
+    "task_type",
+    "due_by"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique task identifier"
+    },
+    "task_type": {
+      "type": "string",
+      "description": "Type of task"
+    },
+    "due_by": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Original due date that was missed"
+    },
+    "expired_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the task expired"
+    },
+    "assignee": {
+      "type": "object",
+      "description": "Task assignee at time of expiration",
+      "properties": {
+        "actor_id": {
+          "type": "string"
+        },
+        "actor_role": {
+          "type": "string"
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "human_internal",
+            "human_external",
+            "system",
+            "service"
+          ]
+        }
+      }
+    }
+  }
+}
+

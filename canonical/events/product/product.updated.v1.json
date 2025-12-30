@@ -1,0 +1,145 @@
+{
+  "$id": "https://schemas.rmbrain.ai/product.updated.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product Updated Event Payload",
+  "type": "object",
+  "description": "Payload for product.updated event",
+  "required": [
+    "product_id",
+    "tenant_id",
+    "name",
+    "product_type",
+    "asset_class",
+    "status",
+    "risk",
+    "eligibility",
+    "provenance",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "product_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "name": { "type": "string" },
+    "product_type": {
+      "type": "string",
+      "enum": [
+        "mutual_fund",
+        "pms",
+        "aif",
+        "bond",
+        "structured_product",
+        "insurance",
+        "reit",
+        "invit",
+        "private_credit",
+        "pe_vc_fund",
+        "cash"
+      ]
+    },
+    "asset_class": {
+      "type": "string",
+      "enum": ["equity", "debt", "hybrid", "alternatives", "cash"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["under_review", "active", "rejected", "on_hold", "inactive", "restricted", "closed"]
+    },
+    "issuer": { "type": "string" },
+    "risk": {
+      "type": "object",
+      "required": ["risk_level"],
+      "properties": {
+        "risk_level": {
+          "type": "string",
+          "enum": ["low", "moderate", "high", "very_high"]
+        },
+        "volatility_band": { "type": "string" },
+        "drawdown_profile": { "type": "string" }
+      }
+    },
+    "eligibility": {
+      "type": "object",
+      "required": ["min_investment"],
+      "properties": {
+        "min_investment": { "type": "number" },
+        "investor_types": {
+          "type": "array",
+          "items": {
+            "enum": ["retail", "hni", "uhni", "institutional"]
+          }
+        },
+        "allowed_risk_profiles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "lock_in_months": { "type": "integer" },
+        "liquidity": {
+          "type": "string",
+          "enum": ["daily", "monthly", "quarterly", "illiquid"]
+        }
+      }
+    },
+    "artefacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["artefact_id", "type"],
+        "properties": {
+          "artefact_id": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "factsheet",
+              "brochure",
+              "sid",
+              "fund_manager_note",
+              "risk_disclosure",
+              "presentation",
+              "video",
+              "other"
+            ]
+          },
+          "version": { "type": "string" },
+          "effective_from": { "type": "string", "format": "date" },
+          "effective_to": { "type": "string", "format": "date" },
+          "mandatory_for_advice": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "regulatory": {
+      "type": "object",
+      "properties": {
+        "regulator": { "type": "string" },
+        "category_code": { "type": "string" },
+        "restricted_jurisdictions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "last_verified_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}
+

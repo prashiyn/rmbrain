@@ -1,0 +1,36 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/document.status_changed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document Status Changed Event Payload",
+  "type": "object",
+  "required": ["document_id", "old_status", "new_status"],
+  "properties": {
+    "document_id": { "type": "string" },
+    "old_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "active",
+        "superseded",
+        "archived",
+        "suspended",
+        "removed"
+      ]
+    },
+    "new_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "under_review",
+        "active",
+        "superseded",
+        "archived",
+        "suspended",
+        "removed"
+      ]
+    },
+    "reason": { "type": "string", "description": "Reason for status change" }
+  }
+}
+

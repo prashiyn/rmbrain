@@ -1,0 +1,54 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/riskprofile.changed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Risk Profile Changed Event Payload",
+  "type": "object",
+  "description": "Payload for riskprofile.changed event emitted by cds_riskprofile",
+  "required": [
+    "primary_client_id"
+  ],
+  "properties": {
+    "primary_client_id": {
+      "type": "string",
+      "description": "Primary client ID associated with the risk profile"
+    },
+    "relationship_id": {
+      "type": "string",
+      "description": "Relationship ID (optional, preferred when available)"
+    },
+    "scope_client_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional affected client IDs"
+    },
+    "riskprofile": {
+      "type": "object",
+      "description": "Risk profile-specific data",
+      "properties": {
+        "change_significant": {
+          "type": "boolean",
+          "description": "Whether the change is significant enough to require action"
+        },
+        "previous_risk_level": {
+          "type": "string",
+          "description": "Previous risk level"
+        },
+        "new_risk_level": {
+          "type": "string",
+          "description": "New risk level"
+        }
+      }
+    },
+    "primary_rm_id": {
+      "type": "string",
+      "description": "Primary relationship manager ID"
+    },
+    "relationship_manager_id": {
+      "type": "string",
+      "description": "Relationship manager ID"
+    }
+  }
+}
+

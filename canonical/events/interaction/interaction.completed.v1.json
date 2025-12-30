@@ -1,0 +1,15 @@
+{
+  "$id": "https://schemas.rmbrain.ai/interaction.completed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interaction Completed Event Payload",
+  "type": "object",
+  "description": "Payload for interaction.completed event",
+  "required": ["interaction_id"],
+  "properties": {
+    "interaction_id": {
+      "type": "string",
+      "description": "ID of the interaction being completed"
+    }
+  }
+}
+

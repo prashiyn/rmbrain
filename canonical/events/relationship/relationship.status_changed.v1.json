@@ -1,0 +1,27 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/relationship.status_changed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Relationship Status Changed Event Payload",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "old_status",
+    "new_status"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string" },
+    "old_status": {
+      "type": "string",
+      "enum": ["prospective", "active", "dormant", "at_risk", "terminated", "archived"]
+    },
+    "new_status": {
+      "type": "string",
+      "enum": ["prospective", "active", "dormant", "at_risk", "terminated", "archived"]
+    },
+    "triggered_by": {
+      "type": "string",
+      "description": "What triggered the status change (e.g., 'health_declined', 'manual_update')"
+    }
+  }
+}
+

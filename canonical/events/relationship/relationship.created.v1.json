@@ -1,0 +1,90 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/relationship.created.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Relationship Created Event Payload",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "primary_client_id"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string" },
+    "primary_client_id": { "type": "string" },
+    "scope_client_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "tenant_id": { "type": "string" },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["actor_id", "actor_role", "actor_type"],
+        "properties": {
+          "actor_id": { "type": "string" },
+          "actor_role": { "type": "string" },
+          "actor_type": {
+            "type": "string",
+            "enum": ["human_internal", "human_external", "system", "service"]
+          },
+          "display_name": { "type": "string" }
+        }
+      }
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "primary_coverage",
+        "secondary_coverage",
+        "investment_specialist",
+        "product_specialist",
+        "relationship_manager",
+        "system_managed"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["prospective", "active", "dormant", "at_risk", "terminated", "archived"]
+    },
+    "health": {
+      "type": "object",
+      "required": ["overall_score"],
+      "properties": {
+        "overall_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "engagement_score": { "type": "number" },
+        "responsiveness": { "type": "number" },
+        "trust_signal": { "type": "number" },
+        "satisfaction_signal": { "type": "number" },
+        "trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"]
+        },
+        "last_calculated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "engagement_signals": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "notes": { "type": "string" },
+    "derived_from": {
+      "type": "object",
+      "properties": {
+        "entity_type": {
+          "type": "string",
+          "enum": ["client", "client_link"]
+        },
+        "entity_id": { "type": "string" }
+      }
+    }
+  }
+}
+

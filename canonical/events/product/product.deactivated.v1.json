@@ -1,0 +1,15 @@
+{
+  "$id": "https://schemas.rmbrain.ai/product.deactivated.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product Deactivated Event Payload",
+  "type": "object",
+  "description": "Payload for product.deactivated event",
+  "required": ["product_id"],
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "description": "ID of the product to deactivate"
+    }
+  }
+}
+

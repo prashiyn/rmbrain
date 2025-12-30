@@ -1,0 +1,100 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/task.created.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Task Created Event Payload",
+  "type": "object",
+  "description": "Payload for task.created event emitted by cds_task",
+  "required": [
+    "task_id",
+    "task_type",
+    "status",
+    "priority"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique task identifier"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "review_document",
+        "review_interaction",
+        "follow_up_client",
+        "relationship_intervention",
+        "update_risk_profile",
+        "suitability_check",
+        "compliance_review",
+        "product_update_required",
+        "information_missing",
+        "client_structure_review",
+        "system_followup"
+      ],
+      "description": "Type of task"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "blocked",
+        "completed",
+        "cancelled",
+        "expired",
+        "superseded",
+        "archived"
+      ],
+      "description": "Task status"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "description": "Task priority"
+    },
+    "assignee": {
+      "type": "object",
+      "description": "Task assignee",
+      "properties": {
+        "actor_id": {
+          "type": "string"
+        },
+        "actor_role": {
+          "type": "string"
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "human_internal",
+            "human_external",
+            "system",
+            "service"
+          ]
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "description": "Task scope",
+      "properties": {
+        "relationship_id": {
+          "type": "string"
+        },
+        "primary_client_id": {
+          "type": "string"
+        },
+        "scope_client_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "due_by": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Task due date"
+    }
+  }
+}
+

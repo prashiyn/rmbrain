@@ -1,0 +1,68 @@
+{
+  "$id": "https://schemas.rmbrain.ai/client.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Client",
+  "type": "object",
+  "required": [
+    "client_id",
+    "tenant_id",
+    "client_type",
+    "status",
+    "identifiers",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "client_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "client_type": {
+      "type": "string",
+      "enum": [
+        "individual",
+        "company",
+        "family",
+        "family_office",
+        "trust",
+        "partnership",
+        "fund",
+        "spv",
+        "estate",
+        "llp"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "prospect",
+        "active",
+        "inactive",
+        "restricted",
+        "closed",
+        "archived"
+      ]
+    },
+    "identifiers": {
+      "type": "object",
+      "description": "Legal and regulatory identifiers",
+      "additionalProperties": true
+    },
+    "profile": {
+      "type": "object",
+      "description": "Human-readable profile information",
+      "additionalProperties": true
+    },
+    "roles": {
+      "type": "array",
+      "description": "Contextual roles played by this client",
+      "items": { "type": "string" }
+    },
+    "attributes": {
+      "type": "object",
+      "description": "Flexible attributes",
+      "additionalProperties": true
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}
+

@@ -1,0 +1,15 @@
+{
+  "$id": "https://schemas.rmbrain.ai/interaction.created.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interaction Created Event Payload",
+  "type": "object",
+  "description": "Payload for interaction.created event (emitted by this service)",
+  "required": ["interaction_id"],
+  "properties": {
+    "interaction_id": {
+      "type": "string",
+      "description": "ID of the newly created interaction"
+    }
+  }
+}
+

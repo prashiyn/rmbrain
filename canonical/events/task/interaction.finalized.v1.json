@@ -1,0 +1,54 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/interaction.finalized.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Interaction Finalized Event Payload",
+  "type": "object",
+  "description": "Payload for interaction.finalized event emitted by cds_interaction",
+  "required": [
+    "primary_client_id"
+  ],
+  "properties": {
+    "primary_client_id": {
+      "type": "string",
+      "description": "Primary client ID involved in the interaction"
+    },
+    "relationship_id": {
+      "type": "string",
+      "description": "Relationship ID (optional, preferred when available)"
+    },
+    "scope_client_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional affected client IDs"
+    },
+    "interaction": {
+      "type": "object",
+      "description": "Interaction-specific data",
+      "properties": {
+        "has_client_participant": {
+          "type": "boolean",
+          "description": "Whether client participated in the interaction"
+        },
+        "interaction_type": {
+          "type": "string",
+          "description": "Type of interaction"
+        },
+        "summary": {
+          "type": "string",
+          "description": "Interaction summary"
+        }
+      }
+    },
+    "primary_rm_id": {
+      "type": "string",
+      "description": "Primary relationship manager ID"
+    },
+    "relationship_manager_id": {
+      "type": "string",
+      "description": "Relationship manager ID"
+    }
+  }
+}
+

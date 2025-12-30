@@ -1,0 +1,12 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/document.version_added.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document Version Added Event Payload",
+  "type": "object",
+  "required": ["document_id", "version"],
+  "properties": {
+    "document_id": { "type": "string" },
+    "version": { "type": "string" }
+  }
+}
+

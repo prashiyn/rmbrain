@@ -1,0 +1,26 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/suitability.breached.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SuitabilityBreached",
+  "type": "object",
+  "required": [
+    "assessment_id",
+    "client_id",
+    "product_id",
+    "riskprofile_id",
+    "tenant_id",
+    "reasons"
+  ],
+  "properties": {
+    "assessment_id": { "type": "string" },
+    "client_id": { "type": "string" },
+    "product_id": { "type": "string" },
+    "riskprofile_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
+

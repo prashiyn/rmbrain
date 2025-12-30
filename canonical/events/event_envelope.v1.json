@@ -1,0 +1,101 @@
+{
+  "$id": "https://schemas.rmbrain.ai/event_envelope.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CanonicalEventEnvelope",
+  "type": "object",
+  "required": [
+    "event_id",
+    "event_type",
+    "event_version",
+    "source",
+    "tenant_id",
+    "entity",
+    "actor",
+    "occurred_at",
+    "payload"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Globally unique event identifier"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Canonical event name"
+    },
+    "event_version": {
+      "type": "string",
+      "description": "Version of the event payload schema"
+    },
+    "source": {
+      "type": "object",
+      "required": ["service"],
+      "properties": {
+        "service": {
+          "type": "string",
+          "description": "Emitting service name (cds_client, cds_task, etc.)"
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["dev", "staging", "prod"]
+        }
+      }
+    },
+    "tenant_id": {
+      "type": "string"
+    },
+    "entity": {
+      "type": "object",
+      "required": ["entity_type", "entity_id"],
+      "properties": {
+        "entity_type": {
+          "type": "string",
+          "enum": [
+            "client",
+            "client_link",
+            "relationship",
+            "interaction",
+            "document",
+            "product",
+            "riskprofile",
+            "suitability",
+            "task"
+          ]
+        },
+        "entity_id": {
+          "type": "string"
+        }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "required": ["actor_id", "actor_role", "actor_type"],
+      "properties": {
+        "actor_id": { "type": "string" },
+        "actor_role": { "type": "string" },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "human_internal",
+            "human_external",
+            "system",
+            "service"
+          ]
+        }
+      }
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Optional correlation for tracing workflows"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Event-specific payload (validated separately)"
+    }
+  }
+}
+
