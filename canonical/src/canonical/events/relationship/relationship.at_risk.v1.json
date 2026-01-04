@@ -1,0 +1,24 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/relationship/relationship.at_risk.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RelationshipAtRisk",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "health_score"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string" },
+    "health_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Current overall health score that triggered at_risk status"
+    },
+    "risk_factors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Factors contributing to at_risk status"
+    }
+  }
+}

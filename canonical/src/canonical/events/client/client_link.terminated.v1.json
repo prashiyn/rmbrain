@@ -1,0 +1,21 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/client/client_link.terminated.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClientLinkTerminated",
+  "type": "object",
+  "required": [
+    "link_id",
+    "status"
+  ],
+  "properties": {
+    "link_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "terminated"
+      ]
+    }
+  }
+}

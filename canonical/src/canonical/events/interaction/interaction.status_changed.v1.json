@@ -1,0 +1,41 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/interaction/interaction.status_changed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "InteractionStatusChanged",
+  "type": "object",
+  "required": ["interaction_id", "old_status", "new_status"],
+  "properties": {
+    "interaction_id": {
+      "type": "string",
+      "description": "ID of the interaction"
+    },
+    "old_status": {
+      "type": "string",
+      "enum": [
+        "initiated",
+        "in_progress",
+        "completed",
+        "documents_attached",
+        "under_review",
+        "finalized",
+        "superseded",
+        "archived",
+        "cancelled"
+      ]
+    },
+    "new_status": {
+      "type": "string",
+      "enum": [
+        "initiated",
+        "in_progress",
+        "completed",
+        "documents_attached",
+        "under_review",
+        "finalized",
+        "superseded",
+        "archived",
+        "cancelled"
+      ]
+    }
+  }
+}

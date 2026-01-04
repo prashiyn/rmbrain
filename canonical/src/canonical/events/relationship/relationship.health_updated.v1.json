@@ -1,0 +1,36 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/relationship/relationship.health_updated.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RelationshipHealthUpdated",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "health"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string" },
+    "health": {
+      "type": "object",
+      "required": ["overall_score"],
+      "properties": {
+        "overall_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "engagement_score": { "type": "number" },
+        "responsiveness": { "type": "number" },
+        "trust_signal": { "type": "number" },
+        "satisfaction_signal": { "type": "number" },
+        "trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"]
+        },
+        "last_calculated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

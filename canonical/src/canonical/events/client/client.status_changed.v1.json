@@ -1,0 +1,24 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/client/client.status_changed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClientStatusChanged",
+  "type": "object",
+  "required": [
+    "client_id",
+    "status"
+  ],
+  "properties": {
+    "client_id": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": [
+        "prospect",
+        "active",
+        "inactive",
+        "restricted",
+        "closed",
+        "archived"
+      ]
+    }
+  }
+}

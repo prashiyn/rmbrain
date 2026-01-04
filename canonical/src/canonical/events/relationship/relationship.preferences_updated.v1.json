@@ -1,0 +1,18 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/relationship/relationship.preferences_updated.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RelationshipPreferencesUpdated",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "preferences"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string" },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Updated client preferences"
+    }
+  }
+}

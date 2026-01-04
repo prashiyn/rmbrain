@@ -45,57 +45,44 @@ createdb -h localhost -U postgres rmbrain_mainapp
 createdb -h localhost -U postgres cds_task
 ```
 
-### 2. Run SQL Migrations (where applicable)
+### 2. Run Alembic Migrations
 
-#### Client Service
+All services now use Alembic for database migrations. Run migrations for all services:
+
 ```bash
-psql -h localhost -U postgres -d cds_client -f client_service/migrations/init.sql
+./scripts/run_alembic_migrations.sh upgrade head
 ```
 
-#### Document Service
+Or run migrations individually:
+
 ```bash
-psql -h localhost -U postgres -d cds_document -f document_service/migrations/init.sql
+# Client Service
+cd client_service && uv run alembic upgrade head && cd ..
+
+# Task Service
+cd task_service && uv run alembic upgrade head && cd ..
+
+# Document Service
+cd document_service && uv run alembic upgrade head && cd ..
+
+# ... repeat for each service
 ```
 
-#### Task Service
-```bash
-psql -h localhost -U postgres -d cds_task -f task_service/migrations/init.sql
-```
-
-### 3. Run Python Init Scripts (where applicable)
-
-#### CAS Service
-```bash
-cd cas_service
-uv run python scripts/init_db.py
-cd ..
-```
-
-### 4. Services with Auto-Creation
-
-The following services will automatically create their schemas on first startup using SQLAlchemy's `create_all()`:
-
-- **CDS Interaction Service** - Creates tables on startup
-- **CDS Product Service** - Creates tables on startup
-- **CDS Relationship Service** - Creates tables on startup
-- **CDS Risk Profile Service** - Creates tables on startup
-- **RMBrain Main App** - Creates tables on startup
-
-These services will initialize their schemas when you run `dapr run -f dapr.yaml`.
+For detailed Alembic usage, see [ALEMBIC_MIGRATION_GUIDE.md](./ALEMBIC_MIGRATION_GUIDE.md).
 
 ## Database Schema Summary
 
-| Service | Database Name | Setup Method |
-|---------|--------------|--------------|
-| cas-audit | `cas_audit` | Python script (`scripts/init_db.py`) |
-| cds-client | `cds_client` | SQL migration (`migrations/init.sql`) |
-| cds-document | `cds_document` | SQL migration (`migrations/init.sql`) |
-| cds-interaction | `interaction_db` | Auto-created on startup |
-| cds-product | `cds_product` | Auto-created on startup |
-| cds-relationship | `relationship_db` | Auto-created on startup |
-| cds-riskprofile | `riskprofile_db` | Auto-created on startup |
-| rmbrain-mainapp | `rmbrain_mainapp` | Auto-created on startup |
-| cds-task | `cds_task` | SQL migration (`migrations/init.sql`) |
+| Service | Database Name | Migration Method |
+|---------|--------------|------------------|
+| cas-audit | `cas_audit` | Alembic |
+| cds-client | `cds_client` | Alembic |
+| cds-document | `cds_document` | Alembic |
+| cds-interaction | `interaction_db` | Alembic |
+| cds-product | `cds_product` | Alembic |
+| cds-relationship | `relationship_db` | Alembic |
+| cds-riskprofile | `riskprofile_db` | Alembic |
+| rmbrain-mainapp | `rmbrain_mainapp` | Alembic |
+| cds-task | `cds_task` | Alembic |
 
 ## Verification
 
@@ -136,10 +123,13 @@ sudo systemctl status postgresql
 
 ### Migration Errors
 
-If SQL migrations fail, check the error message. Common issues:
-- Tables already exist (safe to ignore)
-- Syntax errors in migration files
-- Missing dependencies
+If Alembic migrations fail, check the error message. Common issues:
+- Database connection errors (check `DATABASE_URL`)
+- Model import errors (check `alembic/env.py` imports)
+- Migration conflicts (use `alembic merge` to resolve)
+- Missing dependencies (run `uv sync`)
+
+For troubleshooting, see [ALEMBIC_MIGRATION_GUIDE.md](./ALEMBIC_MIGRATION_GUIDE.md).
 
 ## Next Steps
 

@@ -1,0 +1,48 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/task/document.uploaded.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DocumentUploaded",
+  "type": "object",
+  "required": [
+    "primary_client_id"
+  ],
+  "properties": {
+    "primary_client_id": {
+      "type": "string",
+      "description": "Primary client ID associated with the document"
+    },
+    "relationship_id": {
+      "type": "string",
+      "description": "Relationship ID (optional, preferred when available)"
+    },
+    "scope_client_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Additional affected client IDs"
+    },
+    "document": {
+      "type": "object",
+      "description": "Document-specific data",
+      "properties": {
+        "requires_review": {
+          "type": "boolean",
+          "description": "Whether the document requires review"
+        },
+        "document_type": {
+          "type": "string",
+          "description": "Type of document"
+        },
+        "category": {
+          "type": "string",
+          "description": "Document category"
+        }
+      }
+    },
+    "relationship_manager_id": {
+      "type": "string",
+      "description": "Relationship manager ID"
+    }
+  }
+}

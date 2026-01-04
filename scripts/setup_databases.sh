@@ -39,36 +39,8 @@ create_database() {
     fi
 }
 
-# Function to run SQL migration file
-run_sql_migration() {
-    local service_name=$1
-    local db_name=$2
-    local migration_file=$3
-    
-    if [ -f "$migration_file" ]; then
-        echo -e "${YELLOW}Running migration: $migration_file${NC}"
-        psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$db_name" -f "$migration_file" > /dev/null
-        echo -e "  ${GREEN}✓${NC} Migration applied"
-    else
-        echo -e "  ${YELLOW}⚠${NC} Migration file not found: $migration_file"
-    fi
-}
-
-# Function to run Python init script
-run_python_init() {
-    local service_dir=$1
-    local script_path=$2
-    
-    if [ -f "$script_path" ]; then
-        echo -e "${YELLOW}Running Python init: $script_path${NC}"
-        cd "$service_dir"
-        uv run python "$script_path" 2>&1 | grep -v "^$" || true
-        cd - > /dev/null
-        echo -e "  ${GREEN}✓${NC} Python init completed"
-    else
-        echo -e "  ${YELLOW}⚠${NC} Python init script not found: $script_path"
-    fi
-}
+# Note: Database migrations are now handled by Alembic
+# Run migrations using: ./scripts/run_alembic_migrations.sh upgrade head
 
 # Get the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -80,63 +52,69 @@ cd "$REPO_ROOT"
 echo ""
 echo -e "${GREEN}=== CAS Audit Service ===${NC}"
 create_database "cas_audit"
-run_python_init "cas_service" "scripts/init_db.py"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd cas_service && uv run alembic upgrade head"
 
 # 2. CDS Client Service
 echo ""
 echo -e "${GREEN}=== CDS Client Service ===${NC}"
 create_database "cds_client"
-run_sql_migration "client_service" "cds_client" "client_service/migrations/init.sql"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd client_service && uv run alembic upgrade head"
 
 # 3. CDS Document Service
 echo ""
 echo -e "${GREEN}=== CDS Document Service ===${NC}"
 create_database "cds_document"
-run_sql_migration "document_service" "cds_document" "document_service/migrations/init.sql"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd document_service && uv run alembic upgrade head"
 
 # 4. CDS Interaction Service
 echo ""
 echo -e "${GREEN}=== CDS Interaction Service ===${NC}"
 create_database "interaction_db"
-echo -e "  ${YELLOW}ℹ${NC} Schema will be auto-created on service startup (SQLAlchemy)"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd interaction_service && uv run alembic upgrade head"
 
 # 5. CDS Product Service
 echo ""
 echo -e "${GREEN}=== CDS Product Service ===${NC}"
 create_database "cds_product"
-echo -e "  ${YELLOW}ℹ${NC} Schema will be auto-created on service startup (SQLAlchemy)"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd product_service && uv run alembic upgrade head"
 
 # 6. CDS Relationship Service
 echo ""
 echo -e "${GREEN}=== CDS Relationship Service ===${NC}"
 create_database "relationship_db"
-echo -e "  ${YELLOW}ℹ${NC} Schema will be auto-created on service startup (SQLAlchemy)"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd relationship_service && uv run alembic upgrade head"
 
 # 7. CDS Risk Profile Service
 echo ""
 echo -e "${GREEN}=== CDS Risk Profile Service ===${NC}"
 create_database "riskprofile_db"
-echo -e "  ${YELLOW}ℹ${NC} Schema will be auto-created on service startup (SQLAlchemy)"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd riskprofile_service && uv run alembic upgrade head"
 
 # 8. RMBrain Main App
 echo ""
 echo -e "${GREEN}=== RMBrain Main App ===${NC}"
 create_database "rmbrain_mainapp"
-echo -e "  ${YELLOW}ℹ${NC} Schema will be auto-created on service startup (SQLAlchemy)"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd rmbrain-mainapp && uv run alembic upgrade head"
 
 # 9. CDS Task Service
 echo ""
 echo -e "${GREEN}=== CDS Task Service ===${NC}"
 create_database "cds_task"
-run_sql_migration "task_service" "cds_task" "task_service/migrations/init.sql"
+echo -e "  ${YELLOW}ℹ${NC} Run migrations: cd task_service && uv run alembic upgrade head"
 
 echo ""
 echo -e "${GREEN}=== Database Setup Complete ===${NC}"
 echo ""
-echo "All databases have been created. Services will auto-create tables on first startup"
-echo "if they use SQLAlchemy's create_all() method."
+echo "All databases have been created."
 echo ""
-echo "To start all services, run:"
-echo "  dapr run -f dapr.yaml"
+echo "Next steps:"
+echo "1. Run Alembic migrations for all services:"
+echo "   ./scripts/run_alembic_migrations.sh upgrade head"
+echo ""
+echo "2. Or run migrations individually:"
+echo "   cd <service> && uv run alembic upgrade head"
+echo ""
+echo "3. Start all services:"
+echo "   dapr run -f dapr.yaml"
 echo ""
 

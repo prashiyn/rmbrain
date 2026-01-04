@@ -1,0 +1,23 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/product/product.status_changed.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProductStatusChanged",
+  "type": "object",
+  "required": ["product_id", "old_status", "new_status"],
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "description": "ID of the product"
+    },
+    "old_status": {
+      "type": "string",
+      "enum": ["under_review", "active", "rejected", "on_hold", "inactive", "restricted", "closed"],
+      "description": "Previous status of the product"
+    },
+    "new_status": {
+      "type": "string",
+      "enum": ["under_review", "active", "rejected", "on_hold", "inactive", "restricted", "closed"],
+      "description": "New status of the product"
+    }
+  }
+}

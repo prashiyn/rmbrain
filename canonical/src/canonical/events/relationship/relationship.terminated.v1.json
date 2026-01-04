@@ -1,0 +1,123 @@
+{
+  "$id": "https://schemas.rmbrain.ai/events/relationship/relationship.terminated.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RelationshipTerminated",
+  "type": "object",
+  "required": [
+    "relationship_id",
+    "tenant_id",
+    "primary_client_id",
+    "actors",
+    "relationship_type",
+    "status",
+    "health",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "relationship_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "primary_client_id": {
+      "type": "string",
+      "description": "The anchor entity for the relationship"
+    },
+    "scope_client_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Additional related client entities (family members, holding companies, SPVs, trusts, etc.)"
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Actors participating in the relationship",
+      "items": {
+        "type": "object",
+        "required": ["actor_id", "actor_role", "actor_type"],
+        "properties": {
+          "actor_id": { "type": "string" },
+          "actor_role": {
+            "type": "string",
+            "description": "Role from canonical actor taxonomy"
+          },
+          "actor_type": {
+            "type": "string",
+            "enum": [
+              "human_internal",
+              "human_external",
+              "system",
+              "service"
+            ]
+          },
+          "display_name": { "type": "string" }
+        }
+      }
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "primary_coverage",
+        "secondary_coverage",
+        "investment_specialist",
+        "product_specialist",
+        "relationship_manager",
+        "system_managed"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "prospective",
+        "active",
+        "dormant",
+        "at_risk",
+        "terminated",
+        "archived"
+      ]
+    },
+    "health": {
+      "type": "object",
+      "required": ["overall_score"],
+      "properties": {
+        "overall_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "engagement_score": { "type": "number" },
+        "responsiveness": { "type": "number" },
+        "trust_signal": { "type": "number" },
+        "satisfaction_signal": { "type": "number" },
+        "trend": {
+          "type": "string",
+          "enum": ["improving", "stable", "declining"]
+        },
+        "last_calculated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "description": "Explicit client preferences",
+      "additionalProperties": true
+    },
+    "engagement_signals": {
+      "type": "object",
+      "description": "Observed, non-AI signals",
+      "additionalProperties": true
+    },
+    "notes": { "type": "string" },
+    "termination_reason": {
+      "type": "string",
+      "description": "Reason for relationship termination"
+    },
+    "terminated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the relationship was terminated"
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}
