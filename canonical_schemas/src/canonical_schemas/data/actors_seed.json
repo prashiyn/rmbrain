@@ -1,0 +1,104 @@
+[
+  {
+    "actor_id": "seed_rm_001",
+    "actor_role": "rm",
+    "actor_type": "human_internal",
+    "display_name": "Alex Chen (RM)"
+  },
+  {
+    "actor_id": "seed_rm_002",
+    "actor_role": "rm",
+    "actor_type": "human_internal",
+    "display_name": "Samira Patel (RM)"
+  },
+  {
+    "actor_id": "seed_relationship_manager_001",
+    "actor_role": "relationship_manager",
+    "actor_type": "human_internal",
+    "display_name": "Jordan Lee (Relationship Manager)"
+  },
+  {
+    "actor_id": "seed_relationship_manager_002",
+    "actor_role": "relationship_manager",
+    "actor_type": "human_internal",
+    "display_name": "Morgan Taylor (Relationship Manager)"
+  },
+  {
+    "actor_id": "seed_investment_specialist_001",
+    "actor_role": "investment_specialist",
+    "actor_type": "human_internal",
+    "display_name": "Riley Kim (Investment Specialist)"
+  },
+  {
+    "actor_id": "seed_product_manager_001",
+    "actor_role": "product_manager",
+    "actor_type": "human_internal",
+    "display_name": "Casey Wright (Product Manager)"
+  },
+  {
+    "actor_id": "seed_portfolio_manager_001",
+    "actor_role": "portfolio_manager",
+    "actor_type": "human_internal",
+    "display_name": "Jamie Foster (Portfolio Manager)"
+  },
+  {
+    "actor_id": "seed_risk_manager_001",
+    "actor_role": "risk_manager",
+    "actor_type": "human_internal",
+    "display_name": "Quinn Hayes (Risk Manager)"
+  },
+  {
+    "actor_id": "seed_compliance_officer_001",
+    "actor_role": "compliance_officer",
+    "actor_type": "human_internal",
+    "display_name": "Skyler Bell (Compliance Officer)"
+  },
+  {
+    "actor_id": "seed_service_rm_001",
+    "actor_role": "service_rm",
+    "actor_type": "human_internal",
+    "display_name": "Drew Morgan (Service RM)"
+  },
+  {
+    "actor_id": "seed_client_001",
+    "actor_role": "client",
+    "actor_type": "human_external",
+    "display_name": "Client Alpha"
+  },
+  {
+    "actor_id": "seed_client_002",
+    "actor_role": "client",
+    "actor_type": "human_external",
+    "display_name": "Client Beta"
+  },
+  {
+    "actor_id": "seed_prospect_001",
+    "actor_role": "prospect",
+    "actor_type": "human_external",
+    "display_name": "Prospect One"
+  },
+  {
+    "actor_id": "seed_prospect_002",
+    "actor_role": "prospect",
+    "actor_type": "human_external",
+    "display_name": "Prospect Two"
+  },
+  {
+    "actor_id": "seed_external_advisor_001",
+    "actor_role": "external_advisor",
+    "actor_type": "human_external",
+    "display_name": "External Advisor (Third Party)"
+  },
+  {
+    "actor_id": "seed_system_001",
+    "actor_role": "system",
+    "actor_type": "system",
+    "display_name": "System (Automated)"
+  },
+  {
+    "actor_id": "seed_cds_relationship_001",
+    "actor_role": "cds_relationship",
+    "actor_type": "service",
+    "display_name": "CDS Relationship Service"
+  }
+]

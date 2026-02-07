@@ -21,12 +21,14 @@ dependencies = [
 ]
 ```
 
-Install using `uv`:
+Install using `uv` (from any service that depends on this package):
 
 ```bash
 cd <service_directory>
 uv sync
 ```
+
+When this package is a **path dependency** (e.g. `canonical-schemas @ file:///path/to/rmbrain/canonical_schemas`), `uv sync` uses the package at that path, so updates to `canonical_schemas` (including the seed data under `src/canonical_schemas/data/`) are picked up the next time you run `uv sync` in the dependent service. For portability in a monorepo, you can use a relative path: `canonical-schemas = { path = "../canonical_schemas" }`.
 
 Or using `pip`:
 
@@ -83,7 +85,11 @@ canonical_schemas/
     └── canonical_schemas/
         ├── __init__.py         # Package exports
         ├── actor.py            # Actor schema definitions
-        └── registry.py         # Schema registry pattern
+        ├── registry.py         # Schema registry pattern
+        └── data/               # Seed data for testing (no user service)
+            ├── actors_seed.json
+            ├── load_actors.py
+            └── README.md
 ```
 
 ### Available Schemas
@@ -91,6 +97,20 @@ canonical_schemas/
 - **Actor**: Canonical actor model with `actor_id`, `actor_role`, `actor_type`, `display_name`
 - **ActorType**: Enum for actor types (`human_internal`, `human_external`, `system`, `service`)
 - **ActorRole**: Enum for actor roles (rm, relationship_manager, client, etc.)
+
+### Seed data (testing)
+
+When there is no user/actor service, tests and apps can use the bundled seed actors:
+
+```python
+from canonical_schemas.data import load_seed_actors, get_actor_by_id, get_actors_by_role
+
+actors = load_seed_actors()
+rm = get_actor_by_id("seed_rm_001")
+clients = get_actors_by_role("client")
+```
+
+See `src/canonical_schemas/data/README.md` for the full list of seed actor IDs.
 
 ### Registry Pattern
 

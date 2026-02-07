@@ -23,6 +23,16 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/canonical_schemas"]
+# Ensure seed data and data README are included in the wheel (explicit for installs from wheel)
+[tool.hatch.build.targets.wheel.force-include]
+"src/canonical_schemas/data/actors_seed.json" = "canonical_schemas/data/actors_seed.json"
+"src/canonical_schemas/data/README.md" = "canonical_schemas/data/README.md"
+
+[tool.hatch.build.targets.sdist]
+packages = ["src/canonical_schemas"]
+[tool.hatch.build.targets.sdist.force-include]
+"src/canonical_schemas/data/actors_seed.json" = "canonical_schemas/data/actors_seed.json"
+"src/canonical_schemas/data/README.md" = "canonical_schemas/data/README.md"
 
 [tool.hatch.metadata]
 allow-direct-references = true

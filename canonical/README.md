@@ -7,6 +7,8 @@ This library provides access to:
 - **Event Schemas**: Canonical JSON schemas for events (client.created, task.completed, etc.)
 - **Semantic Constraints**: YAML-based semantic validation rules
 
+---
+
 ## Installation
 
 Add to your service's `pyproject.toml`:
@@ -24,63 +26,23 @@ Or using `uv`:
 uv add "canonical @ file:///${PROJECT_ROOT}/canonical"
 ```
 
-## Usage
+---
 
-### Loading Entity Schemas
-
-```python
-from canonical import load_entity_schema, SchemaNotFoundError
-
-try:
-    client_schema = load_entity_schema("client", "v1")
-    # Use schema for validation
-except SchemaNotFoundError as e:
-    print(f"Schema not found: {e}")
-```
-
-### Loading Event Schemas
+## Quick Start
 
 ```python
-from canonical import load_event_schema, load_event_envelope_schema, EventNotFoundError
+from canonical import load_entity_schema, load_event_schema
 
-# Load event envelope schema
-envelope_schema = load_event_envelope_schema()
+# Load entity schema
+client_schema = load_entity_schema("client", "v1")
 
-# Load specific event schema
-try:
-    client_created_schema = load_event_schema("client.created", "v1")
-except EventNotFoundError as e:
-    print(f"Event schema not found: {e}")
+# Load event schema
+client_created_schema = load_event_schema("client.created", "v1")
 ```
 
-### Loading Semantic Constraints
+For detailed usage instructions, see [CANONICAL_USAGE_GUIDE.md](./CANONICAL_USAGE_GUIDE.md).
 
-```python
-from canonical import load_semantic_constraints
-
-# Load semantic constraints (returns empty if not found)
-constraints = load_semantic_constraints("client", "v1")
-required_fields = constraints.get("required_fields", [])
-semantic_rules = constraints.get("semantic_constraints", {})
-```
-
-### Listing Available Schemas
-
-```python
-from canonical import list_entities, list_events, list_entity_versions
-
-# List all entities
-entities = list_entities()  # ['client', 'document', 'task', ...]
-
-# List all events for a domain
-client_events = list_events("client")  # ['client.created', 'client.updated', ...]
-
-# List all events
-all_events = list_events()  # All events across all domains
-
-# List versions for an entity
-versions = list_entity_versions("client")  # ['v1']
-```
+---
 
 ## API Reference
 
@@ -115,35 +77,134 @@ versions = list_entity_versions("client")  # ['v1']
 - `list_event_versions(event_type: str) -> list[str]`
   - List all versions for an event type
 
+- `get_event_schema_path(event_type: str, version: str = "v1") -> Path`
+  - Get the file path for an event schema (for testing/debugging)
+
 ### Exceptions
 
 - `SchemaNotFoundError`: Raised when entity or envelope schema not found
 - `EventNotFoundError`: Raised when event schema not found
 - `SemanticNotFoundError`: Raised when semantic file exists but cannot be loaded
 
-## Directory Structure
+---
+
+## Complete Directory Structure
 
 ```
 canonical/
-├── __init__.py
-├── registry.py
-├── pyproject.toml
-├── README.md
-├── entities/
-│   ├── client.v1.json
-│   ├── task.v1.json
-│   └── ...
-├── events/
-│   ├── event_envelope.v1.json
-│   ├── client/
-│   │   ├── client.created.v1.json
-│   │   └── ...
-│   └── ...
-└── semantics/
-    ├── client.v1.semantic.yaml
-    └── ...
+├── pyproject.toml              # Package configuration
+├── uv.lock                     # Dependency lock file
+├── README.md                   # This file
+├── CANONICAL_USAGE_GUIDE.md    # Comprehensive usage guide
+└── src/
+    └── canonical/
+        ├── __init__.py         # Package exports
+        ├── registry.py         # Schema loading and caching logic
+        ├── entities/           # Entity JSON schemas
+        │   ├── client.v1.json
+        │   ├── client_link.v1.json
+        │   ├── document.v1.json
+        │   ├── interaction.v1.json
+        │   ├── product.v1.json
+        │   ├── relationship.v1.json
+        │   ├── riskprofile.v1.json
+        │   ├── suitability_assessment.v1.json
+        │   └── task.v1.json
+        ├── events/             # Event JSON schemas
+        │   ├── event_envelope.v1.json
+        │   ├── client/          # Client domain events
+        │   │   ├── client.created.v1.json
+        │   │   ├── client.updated.v1.json
+        │   │   ├── client.status_changed.v1.json
+        │   │   ├── client_link.created.v1.json
+        │   │   ├── client_link.updated.v1.json
+        │   │   └── client_link.terminated.v1.json
+        │   ├── document/        # Document domain events
+        │   │   ├── document.ingested.v1.json
+        │   │   ├── document.updated.v1.json
+        │   │   ├── document.status_changed.v1.json
+        │   │   ├── document.access_changed.v1.json
+        │   │   ├── document.linked.v1.json
+        │   │   ├── document.version_added.v1.json
+        │   │   └── document.superseded.v1.json
+        │   ├── interaction/    # Interaction domain events
+        │   │   ├── interaction.created.v1.json
+        │   │   ├── interaction.initiated.v1.json
+        │   │   ├── interaction.completed.v1.json
+        │   │   ├── interaction.finalized.v1.json
+        │   │   ├── interaction.status_changed.v1.json
+        │   │   ├── interaction.review_started.v1.json
+        │   │   ├── interaction.cancelled.v1.json
+        │   │   ├── interaction.superseded.v1.json
+        │   │   ├── interaction.documents_attached.v1.json
+        │   │   └── document.linked.v1.json
+        │   ├── product/         # Product domain events
+        │   │   ├── product.created.v1.json
+        │   │   ├── product.updated.v1.json
+        │   │   ├── product.deactivated.v1.json
+        │   │   ├── product.status_changed.v1.json
+        │   │   └── product.artefact.linked.v1.json
+        │   ├── relationship/    # Relationship domain events
+        │   │   ├── relationship.created.v1.json
+        │   │   ├── relationship.status_changed.v1.json
+        │   │   ├── relationship.health_updated.v1.json
+        │   │   ├── relationship.preferences_updated.v1.json
+        │   │   ├── relationship.at_risk.v1.json
+        │   │   └── relationship.terminated.v1.json
+        │   ├── riskprofile/     # Risk profile domain events
+        │   │   ├── riskprofile.created.v1.json
+        │   │   ├── riskprofile.updated.v1.json
+        │   │   ├── riskprofile.activated.v1.json
+        │   │   ├── riskprofile.superseded.v1.json
+        │   │   ├── suitability.assessed.v1.json
+        │   │   └── suitability.breached.v1.json
+        │   └── task/            # Task domain events
+        │       ├── task.created.v1.json
+        │       ├── task.completed.v1.json
+        │       ├── task.status_changed.v1.json
+        │       ├── task.expired.v1.json
+        │       ├── document.uploaded.v1.json
+        │       ├── interaction.finalized.v1.json
+        │       └── riskprofile.changed.v1.json
+        └── semantics/          # Semantic constraint YAML files
+            └── client.v1.semantic.yaml
 ```
+
+---
+
+## Available Entities
+
+- `client` - Client entity schema
+- `client_link` - Client link/relationship schema
+- `document` - Document entity schema
+- `interaction` - Interaction entity schema
+- `product` - Product entity schema
+- `relationship` - Relationship entity schema
+- `riskprofile` - Risk profile entity schema
+- `suitability_assessment` - Suitability assessment entity schema
+- `task` - Task entity schema
+
+---
+
+## Available Event Domains
+
+- **client** - Client lifecycle events (created, updated, status_changed, client_link events)
+- **document** - Document lifecycle events (ingested, updated, status_changed, etc.)
+- **interaction** - Interaction lifecycle events (created, initiated, completed, etc.)
+- **product** - Product lifecycle events (created, updated, deactivated, etc.)
+- **relationship** - Relationship lifecycle events (created, status_changed, terminated, etc.)
+- **riskprofile** - Risk profile and suitability events
+- **task** - Task lifecycle events and consumed events
+
+---
 
 ## Caching
 
 All schemas are cached in memory after first load for performance. The cache is module-level and persists for the lifetime of the Python process.
+
+---
+
+## See Also
+
+- [CANONICAL_USAGE_GUIDE.md](./CANONICAL_USAGE_GUIDE.md) - Comprehensive usage guide with examples
+- [canonical_schemas/](../canonical_schemas/) - Alternative schema library (if applicable)
